@@ -1,12 +1,21 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+
+    val KOTLIN_VERSION="1.3.21"
+
     java
-    kotlin("jvm") version "1.3.21"
+    kotlin("jvm") version KOTLIN_VERSION
     application
-    id("org.springframework.boot") version "2.1.2.RELEASE" apply false
+
     id("org.jetbrains.dokka") version "0.9.17" apply false
+    // spring
+    id("org.springframework.boot") version "2.1.2.RELEASE" apply true
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
+    // kotlin: spring (proxy) related plugins see: https://kotlinlang.org/docs/reference/compiler-plugins.html
+    id("org.jetbrains.kotlin.plugin.spring") version KOTLIN_VERSION
+    id("org.jetbrains.kotlin.plugin.noarg") version KOTLIN_VERSION
+    id("org.jetbrains.kotlin.plugin.allopen") version KOTLIN_VERSION
 }
 
 group = "com.example"
@@ -25,7 +34,15 @@ repositories {
 
 dependencies {
     compile(kotlin("stdlib-jdk8"))
+    // logging
+    implementation("io.github.microutils:kotlin-logging:1.6.10")
+    // spring
+    implementation("org.springframework.boot:spring-boot-starter-web") {
+        exclude(group="org.springframework.boot", module = "spring-boot-starter-tomcat")
+    }
+    implementation("org.springframework.boot:spring-boot-starter-undertow")
 }
+
 
 configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_1_8
