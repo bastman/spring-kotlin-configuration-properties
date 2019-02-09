@@ -44,7 +44,9 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-    
+    // jmespath ... you know "jq" ;)
+    implementation("io.burt:jmespath-jackson:0.2.1")
+
     // spring
     implementation("org.springframework.boot:spring-boot-starter-web") {
         exclude(group="org.springframework.boot", module = "spring-boot-starter-tomcat")
