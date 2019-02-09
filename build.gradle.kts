@@ -36,6 +36,15 @@ dependencies {
     compile(kotlin("stdlib-jdk8"))
     // logging
     implementation("io.github.microutils:kotlin-logging:1.6.10")
+
+    // serialization: jackson json
+    val jacksonVersion =  "2.9.7"
+    implementation("com.fasterxml.jackson.module:jackson-modules-java8:$jacksonVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:$jacksonVersion")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+    
     // spring
     implementation("org.springframework.boot:spring-boot-starter-web") {
         exclude(group="org.springframework.boot", module = "spring-boot-starter-tomcat")
