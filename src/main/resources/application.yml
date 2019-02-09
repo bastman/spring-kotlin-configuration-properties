@@ -22,3 +22,9 @@ app:
       min: 10
       max: 1000
       delay: "PT30S"
+
+  tricky:
+    a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q:
+      - "d0"
+      - "d1"
+      - d3-${app.service.qualifiedName}

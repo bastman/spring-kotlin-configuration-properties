@@ -27,4 +27,7 @@ $ curl http://localhost:8080/api/environment?jq=spring.servlet.multipart
  -> response: {"data":{"max-file-size":"50MB","max-request-size":"50MB"}}
 
 $ curl http://localhost:8080/api/environment?jq=app.service.qualifiedName
+
+$ curl http://localhost:8080/api/environment?jq=app.tricky.a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q
+
 ```
