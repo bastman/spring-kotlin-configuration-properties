@@ -1,5 +1,7 @@
 # spring-kotlin-configuration-properties
 
+How to resolve spring configuration properties - as immutable data class ?
+
 ## quick start
 ```
     $ make help
@@ -16,7 +18,7 @@
     
 ```
 
-## stuff (untyped rest-api)
+## stuff (untyped rest-api example)
 ```
 $ curl http://localhost:8080/api/environment?jq=spring
  -> response: {"data":{"profiles":{"active":"prod"},"beaninfo":{"ignore":"true"},"main":{"banner-mode":"off"},"servlet":{"multipart":{"max-file-size":"50MB","max-request-size":"50MB"}}}}
