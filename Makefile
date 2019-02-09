@@ -20,3 +20,6 @@ gradle-wrapper:
 	./gradlew wrapper --gradle-version=§(GRADLE_VERSION)
 	./gradlew --version
 
+## boot-run:   : run spring-boot
+boot-run:
+	./gradlew bootRun

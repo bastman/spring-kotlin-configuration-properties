@@ -22,7 +22,7 @@ group = "com.example"
 version = "1.0-SNAPSHOT"
 
 application {
-    mainClassName = "com.example.App"
+    mainClassName = "com.example.demo.MainKt"
 }
 
 repositories {
