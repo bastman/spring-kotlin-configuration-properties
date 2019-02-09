@@ -3,6 +3,7 @@
 ## quick start
 ```
     $ make help
-    $ make boot-run   
+    $ make boot-run.dev  
+    $ make boot-run.prod  
 
 ```

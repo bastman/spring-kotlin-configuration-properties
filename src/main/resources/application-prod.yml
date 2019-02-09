@@ -1,0 +1,10 @@
+
+
+spring.profiles.active: "prod"
+
+app:
+  envName: "prod"
+  example:
+    job:
+      enabled: true
+      delay: "PT60S"

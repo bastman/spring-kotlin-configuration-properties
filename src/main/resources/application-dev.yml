@@ -1,0 +1,10 @@
+
+
+spring.profiles.active: "dev"
+
+app:
+  envName: "dev"
+  example:
+    job:
+      enabled: true
+      delay: "PT30S"

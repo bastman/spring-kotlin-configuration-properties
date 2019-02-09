@@ -1,0 +1,24 @@
+server.http2.enabled: true
+
+spring:
+  main.banner-mode: "off"
+  profiles:
+    active: "INVALID_PROFILE"
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+app:
+  envName: "INVALID_ENV"
+  service:
+      name: "example-service"
+      qualifiedName: ${app.service.name}-${app.envName}
+
+  example:
+    job:
+      enabled: true
+      min: 10
+      max: 1000
+      delay: "PT30S"

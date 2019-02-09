@@ -17,9 +17,12 @@ idea-start:
 ## gradle-wrapper:   : install gradle wrapper
 gradle-wrapper:
 	./gradlew --version
-	./gradlew wrapper --gradle-version=§(GRADLE_VERSION)
+	./gradlew wrapper --gradle-version=$(GRADLE_VERSION)
 	./gradlew --version
 
-## boot-run:   : run spring-boot
-boot-run:
-	./gradlew bootRun
+## boot-run.dev:   : run spring-boot (spring.profiles.active=dev)
+boot-run.dev:
+	./gradlew bootRun --args='--spring.profiles.active=dev'
+## boot-run.prod:   : run spring-boot (spring.profiles.active=prod)
+boot-run.prod:
+	./gradlew bootRun --args='--spring.profiles.active=prod'
