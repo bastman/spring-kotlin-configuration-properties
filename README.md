@@ -2,6 +2,8 @@
 
 How to resolve spring configuration properties - as immutable data class ?
 
+use: spring binder
+
 ## quick start
 ```
     $ make help
@@ -10,7 +12,17 @@ How to resolve spring configuration properties - as immutable data class ?
 
 ```
 
-## the trick: spring binder + jmespath (aka 'jq') ...
+## spring binder
+```
+
+val spring:Any? = env.decode("spring") { JSON.convertValue(it) }
+val app:Any = env.decode("app") { JSON.convertValue(it) }
+val items:List<String> = env.decode("app.example.job.items") { JSON.convertValue(it) }
+
+```
+
+
+## spring binder + jmespath (aka 'jq') ...
 ```
     data class MyAwesomeConfig(val url:String, user:String, pass:String, timeout:Duration)
 
