@@ -5,6 +5,7 @@ import com.example.demo.config.encode
 import com.example.demo.exampleJob.ExampleJobConfig
 import com.example.demo.util.spring.binder.decode
 import com.example.demo.util.spring.binder.jmespath
+import com.example.demo.util.spring.binder.jq
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.convertValue
 import mu.KLogging
@@ -25,6 +26,13 @@ class ApiController(
     @GetMapping("/api/environment")
     fun environment(@RequestParam jq: String): JqResponse {
         val data: Any? = env.jmespath(jq)
+        return JqResponse(data = data)
+                .also(::logResponse)
+    }
+
+    @GetMapping("/api/environment/v2")
+    fun environmentV2(@RequestParam jq: String): JqResponse {
+        val data: Any? = env.jq(query = jq) { JSON.convertValue(it) }
         return JqResponse(data = data)
                 .also(::logResponse)
     }
