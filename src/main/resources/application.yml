@@ -22,6 +22,8 @@ app:
       min: 10
       max: 1000
       delay: "PT30S"
+      items: [ "item-0", "item-1","item-2"]
+      foo: ${SOME_ENV_VAR}
 
   tricky:
     a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q:
