@@ -31,6 +31,12 @@ val items:List<String> = env.decode("app.example.job.items") { JSON.convertValue
 ```
 
 ## stuff (untyped rest-api example): jmespath (graceful)
+
+Findings:
+- Direct access to List-types: returns Map type
+- Does not allow direct access to snake-case properties, e.g: app.service.q-name
+- Allows access to object that contains snake-case properties, e.g. app.service
+
 ```
 $ curl http://localhost:8080/api/environment/jmespath/v1?q=spring
  -> response: {"data":{"profiles":{"active":"prod"},"beaninfo":{"ignore":"true"},"main":{"banner-mode":"off"},"servlet":{"multipart":{"max-file-size":"50MB","max-request-size":"50MB"}}}}
@@ -40,9 +46,55 @@ $ curl http://localhost:8080/api/environment/jmespath/v1?q=spring.servlet.multip
 
 $ curl http://localhost:8080/api/environment/jmespath/v1?q=app.service.qualifiedName
  -> response: {"data":"example-service-prod"}
+ 
+$ curl http://localhost:8080/api/environment/jmespath/v1?q=app.service.q-name
+ ->  Exception: Unable to compile expression \"app.service.q-name\": syntax error
+ 
 $ curl http://localhost:8080/api/environment/jmespath/v1?q=app.serviceXXXXX.qualifiedName
  -> response: {"data":null}
 
+$ curl http://localhost:8080/api/environment/jmespath/v1?q=app.tricky.a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p
+ -> response: {"data":{"q":{"0":"d0","1":"d1","2":"d3-example-service-prod"}}}
+ 
 $ curl http://localhost:8080/api/environment/jmespath/v1?q=app.tricky.a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q
+ -> response: {"data":{"0":"d0","1":"d1","2":"d3-example-service-prod"}}
+
+```
+
+## stuff (untyped rest-api example): spring binder 
+
+Findings:
+
+- Fails on direct access of camelCase properties, e.g. app.service.qualifiedName
+- Direct access to snake-case properties works: app.service.q-name
+- Access to objects containing camelCase properties works: e.g.: app.service
+- Direct access to List-types: returns List
+- Access to object containing List types: returns object containing Map type
+
+
+```
+$ curl http://localhost:8080/api/environment/bind/v1?q=app.service
+ -> response: {"data":{"name":"example-service","qualifiedName":"example-service-prod","q-name":"example-service-prod"}}
+
+$ curl http://localhost:8080/api/environment/bind/v1?q=app.service.q-name
+ -> Exception: Configuration property name 'app.service.qualifiedName'
+
+$ curl http://localhost:8080/api/environment/bind/v1?q=app.service.q-name
+ -> response: {"data":"example-service-prod"}
+
+$ curl http://localhost:8080/api/environment/bind/v1?q=app.service.foo
+ -> response: {"data":null}
+ 
+$ curl http://localhost:8080/api/environment/bind/v1?q=app.foo.bar
+ -> response: {"data":null} 
+
+$ curl http://localhost:8080/api/environment/bind/v1?q=spring.servlet.multipart
+ -> response: {"data":{"max-file-size":"50MB","max-request-size":"50MB"}}
+
+$ curl http://localhost:8080/api/environment/bind/v1?q=app.tricky.a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p
+ -> respnse: {"data":{"q":{"0":"d0","1":"d1","2":"d3-example-service-prod"}}}
+
+$ curl http://localhost:8080/api/environment/bind/v1?q=app.tricky.a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q
+ -> response: {"data":["d0","d1","d3-example-service-prod"]}
 
 ```

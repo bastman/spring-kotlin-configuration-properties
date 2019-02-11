@@ -15,7 +15,7 @@ app:
   service:
       name: "example-service"
       qualifiedName: ${app.service.name}-${app.envName}
-
+      q-name: ${app.service.name}-${app.envName}
   example:
     job:
       enabled: true
