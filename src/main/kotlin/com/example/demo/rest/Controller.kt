@@ -54,6 +54,16 @@ class ApiController(
                 exec("app.example.job.items") { q ->
                     env.decode(q) { JSON.convertValue<List<String>>(it) }
                 },
+                exec("[example.job.items]") { q ->
+                    env.jq("app", q) {
+                        JSON.convertValue<Any>(it)
+                    }
+                },
+                exec("app.example.job.items") { q ->
+                    env.jq(q) {
+                        JSON.convertValue<Map<Any,String>>(it).values.toList()
+                    }
+                },
                 exec("app.example2.job") { q ->
                     env.decode(q) { JSON.convertValue<JsonNode?>(it) }
                 },

@@ -2,7 +2,9 @@
 
 How to resolve spring configuration properties - as immutable data class ?
 
-use: spring binder
+use: 
+- spring-binder 
+- spring-binder + jmespath (see: http://jmespath.org/)
 
 ## quick start
 ```
@@ -12,7 +14,15 @@ use: spring binder
 
 ```
 
-## spring binder
+## approaches
+
+- spring-binder
+- spring-binder + jmespath
+
+Note: None of them will raise exceptions on missing environment variables.
+
+
+## spring-binder
 ```
 
 val spring:Any? = env.decode("spring") { JSON.convertValue(it) }
@@ -22,18 +32,22 @@ val items:List<String> = env.decode("app.example.job.items") { JSON.convertValue
 ```
 
 
-## spring binder + jmespath (aka 'jq') ...
+## spring-binder + jmespath (aka 'jq') ...
 ```
     data class MyAwesomeConfig(val url:String, user:String, pass:String, timeout:Duration)
 
-    val conf:MyAwesomeConfig = env.jmespath("app.http-client.config")  
+    val conf:MyAwesomeConfig = env.jmespath("app.http.client.config")  
     
 ```
 
-## stuff (untyped rest-api example): jmespath (graceful)
+## rest-api example: jmespath
 
 Findings:
 - Direct access to List-types: returns Map type
+- Direct access to List-Types might be solved, e.g: 
+```
+    val items:List<String> = env.jq("app.example.job.items") { JSON.convertValue<Map<Any,String>>(it).values.toList() }
+```                                                          
 - Does not allow direct access to snake-case properties, e.g: app.service.q-name
 - Allows access to object that contains snake-case properties, e.g. app.service
 
@@ -61,7 +75,7 @@ $ curl http://localhost:8080/api/environment/jmespath/v1?q=app.tricky.a.b.c.d.e.
 
 ```
 
-## stuff (untyped rest-api example): spring binder 
+## rest-api example: spring-binder 
 
 Findings:
 
@@ -92,7 +106,7 @@ $ curl http://localhost:8080/api/environment/bind/v1?q=spring.servlet.multipart
  -> response: {"data":{"max-file-size":"50MB","max-request-size":"50MB"}}
 
 $ curl http://localhost:8080/api/environment/bind/v1?q=app.tricky.a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p
- -> respnse: {"data":{"q":{"0":"d0","1":"d1","2":"d3-example-service-prod"}}}
+ -> response: {"data":{"q":{"0":"d0","1":"d1","2":"d3-example-service-prod"}}}
 
 $ curl http://localhost:8080/api/environment/bind/v1?q=app.tricky.a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q
  -> response: {"data":["d0","d1","d3-example-service-prod"]}
