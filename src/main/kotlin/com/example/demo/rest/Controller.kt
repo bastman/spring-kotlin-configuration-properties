@@ -36,26 +36,41 @@ class ApiController(
         return JqResponse(data = data)
                 .also(::logResponse)
     }
+
     @GetMapping("/api/environment/bind/v1")
     fun environmentBind(@RequestParam q: String): JqResponse {
-        val data: Any? = env.decode(name=q) { JSON.convertValue(it) }
+        val data: Any? = env.decode(name = q) { JSON.convertValue(it) }
         return JqResponse(data = data)
                 .also(::logResponse)
     }
 
     @GetMapping("/api/configs")
-    fun configs(): Map<String, Any?> =
-            mapOf(
-                    "exampleJobConfig" to exampleJobConfig,
-                    "app.example.job.delay" to env
-                            .decode("app.example.job.delay") { JSON.convertValue<Duration>(it) },
-                    "app.example.job.items" to env
-                            .decode("app.example.job.items") { JSON.convertValue<List<String>>(it) },
-                    "x-app.example2.job.toJsoNode?" to env
-                            .decode("app.example2.job") { JSON.convertValue<JsonNode?>(it) },
-                    "x-app.example.job.toJsoNode" to env
-                            .decode("app.example.job") { JSON.convertValue<JsonNode>(it) }
-            ).also(::logResponse)
+    fun configs(): Map<String, Any?> {
+        val results: List<ExecResult> = listOf(
+                ExecResult(q = "exampleJobConfig", result = exampleJobConfig),
+                exec("app.example.job.delay") { q ->
+                    env.decode(q) { JSON.convertValue<Duration>(it) }
+                },
+                exec("app.example.job.items") { q ->
+                    env.decode(q) { JSON.convertValue<List<String>>(it) }
+                },
+                exec("app.example2.job") { q ->
+                    env.decode(q) { JSON.convertValue<JsonNode?>(it) }
+                },
+                exec("app.example.job") { q ->
+                    env.decode(q) { JSON.convertValue<JsonNode>(it) }
+                },
+                exec("app.service.q-name") { q ->
+                    env.decode(q) { JSON.convertValue<JsonNode>(it) }
+                }
+        )
+        val response = mapOf(
+                "results" to results
+        )
+
+        return response.also(::logResponse)
+    }
+
 
     private fun logResponse(response: Any?) {
         logger.info { "response: $response" }
@@ -66,3 +81,9 @@ class ApiController(
 private val JSON = Jackson.defaultMapper()
 
 data class JqResponse(val data: Any?)
+
+data class ExecResult(val q: String, val result: Any?)
+
+fun exec(q: String, block: (String) -> Any?): ExecResult {
+    return ExecResult(q = q, result = block(q))
+}
