@@ -62,6 +62,9 @@ class ApiController(
                 },
                 exec("app.service.q-name") { q ->
                     env.decode(q) { JSON.convertValue<JsonNode>(it) }
+                },
+                exec("app.example.job.foo") { q ->
+                    env.decode(q) { JSON.convertValue<JsonNode?>(it) }
                 }
                 /*
                 ,
