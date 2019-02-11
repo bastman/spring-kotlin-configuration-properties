@@ -63,6 +63,12 @@ class ApiController(
                 exec("app.service.q-name") { q ->
                     env.decode(q) { JSON.convertValue<JsonNode>(it) }
                 }
+                /*
+                ,
+                exec("app.service.q-name") { q ->
+                    env.jq(q) { JSON.convertValue<JsonNode>(it) }
+                }
+                */
         )
         val response = mapOf(
                 "results" to results
