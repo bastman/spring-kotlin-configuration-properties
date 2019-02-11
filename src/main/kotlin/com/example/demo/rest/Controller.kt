@@ -23,16 +23,22 @@ class ApiController(
 ) {
     companion object : KLogging()
 
-    @GetMapping("/api/environment")
-    fun environment(@RequestParam jq: String): JqResponse {
-        val data: Any? = env.jmespath(jq)
+    @GetMapping("/api/environment/jmespath/v1")
+    fun environmentJmespathV1(@RequestParam q: String): JqResponse {
+        val data: Any? = env.jmespath(q)
         return JqResponse(data = data)
                 .also(::logResponse)
     }
 
-    @GetMapping("/api/environment/v2")
-    fun environmentV2(@RequestParam jq: String): JqResponse {
-        val data: Any? = env.jq(query = jq) { JSON.convertValue(it) }
+    @GetMapping("/api/environment/jmespath/v2")
+    fun environmentJmespathV2(@RequestParam q: String): JqResponse {
+        val data: Any? = env.jq(query = q) { JSON.convertValue(it) }
+        return JqResponse(data = data)
+                .also(::logResponse)
+    }
+    @GetMapping("/api/environment/bind/v1")
+    fun environmentBind(@RequestParam q: String): JqResponse {
+        val data: Any? = env.decode(name=q) { JSON.convertValue(it) }
         return JqResponse(data = data)
                 .also(::logResponse)
     }
