@@ -28,6 +28,7 @@ Note: None of them will raise exceptions on missing environment variables.
 val spring:Any? = env.decode("spring") { JSON.convertValue(it) }
 val app:Any = env.decode("app") { JSON.convertValue(it) }
 val items:List<String> = env.decode("app.example.job.items") { JSON.convertValue(it) }
+val delay:Duration = env.decode("app.example.job.delay") { JSON.convertValue(it) }
 
 ```
 
