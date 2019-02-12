@@ -153,7 +153,11 @@ The issue:
 
 - spring stores the "properties" into a "java.util.Set".
 - access to Set should be "relaxed". (e.g.: person.first-name, person.firstName and PERSON_FIRSTNAME)
-- I guess when adding an entry to the set, the key will be "kebab-cased + lower-cased".
+
+"
+The ConfigurationPropertyName class enforces these canonical naming rules, which basically boil down to “use lowercase kebab-case names”.
+So, for example, you should refer to a property in code as person.first-name even if person.firstName or PERSON_FIRSTNAME is used in the underlying source.
+"
 
 A drawback of that approach ...
 
