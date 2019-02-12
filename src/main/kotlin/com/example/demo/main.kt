@@ -1,5 +1,6 @@
 package com.example.demo
 
+import com.example.demo.exampleJob.ExampleJobConfig
 import com.example.demo.util.runtime.RuntimeStats
 import com.example.demo.util.spring.binder.jmespath
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -19,7 +20,10 @@ fun main(args: Array<String>) {
 }
 
 @SpringBootApplication
-class ExampleApplication(private val env: Environment) : ApplicationListener<ApplicationReadyEvent> {
+class ExampleApplication(
+        private val env: Environment,
+        private val exampleJobConfig: ExampleJobConfig
+) : ApplicationListener<ApplicationReadyEvent> {
     companion object : KLogging(), RuntimeStats
 
     @PostConstruct
@@ -47,6 +51,7 @@ class ExampleApplication(private val env: Environment) : ApplicationListener<App
         | === $headline
         | - envName: $envName
         | - service: ${serviceInfo.qualifiedName}
+        | - exampleJobConfig: $exampleJobConfig
         | - charset: ${defaultCharset()}
         | - timezone: ${defaultTimezone().id} (now=${Instant.now()})
         | - memory heap stats (in MB): ${memoryStatsInMegaBytes()}

@@ -6,12 +6,18 @@ use:
 - spring-binder (see: https://spring.io/blog/2018/03/28/property-binding-in-spring-boot-2-0)
 - spring-binder + jmespath (see: http://jmespath.org/)
 
-## quick start
+## quick start (from cli)
 ```
     $ make help
     $ make boot-run.dev  
     $ make boot-run.prod  
 
+```
+
+## quick start (from IDEA)
+```
+Main class: com.example.demo.ExampleApplication
+VM Options: -Dspring.profiles.active=dev
 ```
 
 ## approaches
@@ -155,18 +161,17 @@ The issue:
 - spring stores the "properties" into a "java.util.Set".
 - access to Set should be "relaxed". (e.g.: person.first-name, person.firstName and PERSON_FIRSTNAME)
 
-"
-The ConfigurationPropertyName class enforces these canonical naming rules, which basically boil down to “use lowercase kebab-case names”.
-So, for example, you should refer to a property in code as person.first-name even if person.firstName or PERSON_FIRSTNAME is used in the underlying source.
-"
-
+```
+"The ConfigurationPropertyName class enforces these canonical naming rules, which basically boil down to “use lowercase kebab-case names”.
+So, for example, you should refer to a property in code as person.first-name even if person.firstName or PERSON_FIRSTNAME is used in the underlying source."
+```
 A drawback of that approach ...
 
 - developer needs to know the internals
 - it feels rather "magic" than straight-forward.
 
 ```
-$ java -jar -Dspring.fooBar -> env.get("spring.foo-bar")
+$ java -jar -Dspring.fooBar -> env.decode("spring.foo-bar") { it }
 ```
 
 
