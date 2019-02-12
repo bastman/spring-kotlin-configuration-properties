@@ -113,7 +113,7 @@ $ curl http://localhost:8080/api/environment/bind/v1?q=app.tricky.a.b.c.d.e.f.g.
 
 ```
 
-## spring-binder: kebab-case - whats wrong?
+## spring-binder: kebab-case ... ?
 
 A real world scenario:
 
