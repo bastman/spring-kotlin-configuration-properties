@@ -1,4 +1,4 @@
-rootProject.name = "spring-kotlin-playground"
+rootProject.name = "spring-kotlin-configuration-properties"
 /*
 include(
         "mod1",
