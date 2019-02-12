@@ -3,6 +3,8 @@ package com.example.demo.rest
 import com.example.demo.config.Jackson
 import com.example.demo.config.encode
 import com.example.demo.exampleJob.ExampleJobConfig
+import com.example.demo.exampleJob.ExampleJobResult
+import com.example.demo.exampleJob.ExampleJobService
 import com.example.demo.util.spring.binder.decode
 import com.example.demo.util.spring.binder.jmespath
 import com.example.demo.util.spring.binder.jq
@@ -19,9 +21,15 @@ import java.time.Duration
 @RestController
 class ApiController(
         private val env: Environment,
-        private val exampleJobConfig: ExampleJobConfig
+        private val exampleJobConfig: ExampleJobConfig,
+        private val exampleJobService: ExampleJobService
 ) {
     companion object : KLogging()
+
+    @GetMapping("/api/example-job/execute")
+    fun executeJob(): ExampleJobResult = exampleJobService
+            .execute()
+            .also(::logResponse)
 
     @GetMapping("/api/environment/jmespath/v1")
     fun environmentJmespathV1(@RequestParam q: String): JqResponse {
@@ -61,7 +69,7 @@ class ApiController(
                 },
                 exec("app.example.job.items") { q ->
                     env.jq(q) {
-                        JSON.convertValue<Map<Any,String>>(it).values.toList()
+                        JSON.convertValue<Map<Any, String>>(it).values.toList()
                     }
                 },
                 exec("app.example2.job") { q ->

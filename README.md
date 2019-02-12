@@ -10,7 +10,9 @@ use:
 ```
     $ make help
     $ make boot-run.dev  
-    $ make boot-run.prod  
+    $ make boot-run.prod 
+    
+    $ curl http://localhost:8080/api/example-job/execute 
 
 ```
 
